@@ -10,7 +10,7 @@ jobs:
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       ALPHAVANTAGE_API_KEY: ${{ secrets.ALPHAVANTAGE_API_KEY }}
-      SYMBOLS: "AAPL,MSFT,GOOGL,7203.T,6758.T"  # まずは少数
+      SYMBOLS: "AAPL,MSFT,GOOGL,7203.T,6758.T"
 
     steps:
       - name: Checkout
@@ -24,9 +24,9 @@ jobs:
       - name: Quick sanity check
         run: |
           python -V
-          echo "Symbols: $SYMBOLS"
           echo "Has DB URL? $([ -n "$DATABASE_URL" ] && echo yes || echo no)"
           echo "Has API KEY? $([ -n "$ALPHAVANTAGE_API_KEY" ] && echo yes || echo no)"
+          echo "Symbols: $SYMBOLS"
 
       - name: Install deps
         run: |

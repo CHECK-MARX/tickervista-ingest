@@ -1,0 +1,31 @@
+name: Nightly Ingest
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 20 * * *"   # 毎日05:30 JST（=20:30 UTC）
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      ALPHAVANTAGE_API_KEY: ${{ secrets.ALPHAVANTAGE_API_KEY }}
+      # 収集する銘柄（必要に応じて編集）
+      SYMBOLS: "AAPL,MSFT,GOOGL,7203.T,6758.T"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+        # psycopg2 をビルド不要で入れるため binary を使用
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests psycopg2-binary python-dateutil
+
+      - name: Ingest
+        run: python ingest.py
